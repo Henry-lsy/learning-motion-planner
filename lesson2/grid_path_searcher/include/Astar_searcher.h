@@ -12,7 +12,7 @@ class AstarPathFinder
 {	
 	private:
 
-	protected:
+	protected:data
 		uint8_t * data;
 		GridNodePtr *** GridNodeMap;
 		Eigen::Vector3i goalIdx;
