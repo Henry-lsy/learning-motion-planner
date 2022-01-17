@@ -29,7 +29,7 @@ struct GridNode
 		dir   = Eigen::Vector3i::Zero();
 
 		gScore = inf;
-		fScore = inf;
+		fScore = inf;  // fScore = gScore + hScore
 		cameFrom = NULL;
     }
 

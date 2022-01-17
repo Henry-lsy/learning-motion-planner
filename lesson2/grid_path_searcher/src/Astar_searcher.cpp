@@ -20,7 +20,7 @@ void AstarPathFinder::initGridMap(double _resolution, Vector3d global_xyz_l, Vec
     GLXYZ_SIZE = GLX_SIZE * GLYZ_SIZE;
 
     resolution = _resolution;
-    inv_resolution = 1.0 / _resolution;    
+    inv_resolution = 1.0 / _resolution;
 
     data = new uint8_t[GLXYZ_SIZE];
     memset(data, 0, GLXYZ_SIZE * sizeof(uint8_t));
@@ -135,6 +135,7 @@ inline void AstarPathFinder::AstarGetSucc(GridNodePtr currentPtr, vector<GridNod
 {   
     neighborPtrSets.clear();
     edgeCostSets.clear();
+    Eigen::Vector3i delta_Idx;
     /*
     *
     STEP 4: finish AstarPathFinder::AstarGetSucc yourself 
@@ -142,6 +143,19 @@ inline void AstarPathFinder::AstarGetSucc(GridNodePtr currentPtr, vector<GridNod
     *
     *
     */
+   for(int dx=-1; dx<=1; dx++){
+       for(int dy=-1; dy<=1; dy++){
+           for(int dz=-1; dz<=1; dz++){
+                delta_Idx << dx, dy, dz;
+                neighbor_Idx =  currentPtr->index + delta_Idx;
+                Gride
+                GridNodePtrNew = new GridNode(neighbor_Idx, gridIndex2coord(neighbor_Idx));
+                GridNodePtrNew -> camefrom = currentPtr;
+                neighborPtrSets.push_back(GridNodePtrNew);
+                edgeCostSets.push_back(sqrt(dx*dx + dy*dy + dz*dz))
+           }
+       }
+   }
 }
 
 double AstarPathFinder::getHeu(GridNodePtr node1, GridNodePtr node2)
@@ -158,13 +172,12 @@ double AstarPathFinder::getHeu(GridNodePtr node1, GridNodePtr node2)
     *
     *
     */
-
     return 0;
 }
 
 void AstarPathFinder::AstarGraphSearch(Vector3d start_pt, Vector3d end_pt)
 {   
-    ros::Time time_1 = ros::Time::now();    
+    ros::Time time_1 = ros::Time::now();
 
     //index of start_point and end_point
     Vector3i start_idx = coord2gridIndex(start_pt);
@@ -199,6 +212,8 @@ void AstarPathFinder::AstarGraphSearch(Vector3d start_pt, Vector3d end_pt)
     *
     *
     */
+    // pre-define fscores for each node !!!!!!!!!!
+
     vector<GridNodePtr> neighborPtrSets;
     vector<double> edgeCostSets;
 
@@ -215,6 +230,8 @@ void AstarPathFinder::AstarGraphSearch(Vector3d start_pt, Vector3d end_pt)
         *
         *
         */
+        // get the most priority node from OpenSet
+        currentPtr = OpenSet.begin().second
 
         // if the current node is the goal 
         if( currentPtr->index == goalIdx ){
@@ -245,24 +262,31 @@ void AstarPathFinder::AstarGraphSearch(Vector3d start_pt, Vector3d end_pt)
             neighborPtrSets[i]->id = 1 : expanded, equal to this node is in close set
             *        
             */
-            if(neighborPtr -> id != 1){ //discover a new node, which is not in the closed set and open set
+            if(neighborPtrSets[i] -> id != 1){ //discover a new node, which is not in the closed set and open set
                 /*
                 *
                 *
                 STEP 6:  As for a new node, do what you need do ,and then put neighbor in open set and record it
                 please write your code below
-                *        
+                *
                 */
+                neighborPtrSets[i] -> id = -1;
+                if (neighborPtrSets[i] ->  == inf){
+                    neighborPtrSets[i] -> gScore = CurrentPtr -> gScore + edgeCostSets[i]
+                    neighborPtrSets[i] -> fScore = getHeu(neighborPtrSets[i], endPtr)
+                }
+                openSet.insert( make_pair(neighborPtrSets[i], neighborPtrSets[i] -> fScore) )
                 continue;
             }
-            else if(0){ //this node is in open set and need to judge if it needs to update, the "0" should be deleted when you are coding
+            else if(neighborPtrSets[i] -> id == -1){ //this node is in open set and need to judge if it needs to update, the "0" should be deleted when you are coding
                 /*
                 *
                 *
                 STEP 7:  As for a node in open set, update it , maintain the openset ,and then put neighbor in open set and record it
                 please write your code below
-                *        
+                *
                 */
+                if 
                 continue;
             }
             else{//this node is in closed set
